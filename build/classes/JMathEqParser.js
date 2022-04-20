@@ -25,12 +25,23 @@ class JMathEqParser {
     getBranchByIndex(tree, index) {
         return tree[index];
     }
+    isTrigFunction(str) {
+        return ['sin', 'cos', 'tan', 'cot', 'sinh', 'cosh', 'tanh', 'coth', 'asin', 'acos', 'atan', 'acot'].includes(str);
+    }
     parseConstant(l) {
         switch (l) {
             case 'π':
                 return Math.PI;
             case 'e':
                 return Math.E;
+            case 'γ':
+                return 0.57721566490153286060;
+            case ('Φ'):
+                return 1.61803398874989484820;
+            case 'Ω':
+                return 0.56714329040978387299;
+            case 'K':
+                return 0.91596559417721901505;
         }
     }
     parse(expression) {
@@ -60,7 +71,7 @@ class JMathEqParser {
                 index += skips;
             }
             else if (this.isConstant(l)) {
-                this.pushToTree(tree, 'Constant', this.parseConstant(l));
+                this.pushToTree(tree, 'Number', this.parseConstant(l));
             }
             else if (this.isString(l) && !this.inArray(variables, l)) {
                 // currently only accept x and y as vars

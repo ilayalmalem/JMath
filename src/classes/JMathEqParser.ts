@@ -32,12 +32,24 @@ export default class JMathEqParser {
         return tree[index]
     }
 
+    public isTrigFunction(str: string) {
+        return ['sin', 'cos', 'tan', 'cot', 'sinh', 'cosh', 'tanh', 'coth', 'asin', 'acos', 'atan', 'acot'].includes(str)
+    }
+
     parseConstant(l: string) {
         switch(l) {
             case 'π':
                 return Math.PI
             case 'e':
                 return Math.E
+            case 'γ':
+                return 0.57721566490153286060   
+            case ('Φ'):
+                return 1.61803398874989484820
+            case 'Ω':
+                return 0.56714329040978387299 
+            case 'K':
+                return 0.91596559417721901505   
         }
     }
     
@@ -70,7 +82,7 @@ export default class JMathEqParser {
             }
 
             else if(this.isConstant(l)) {
-                this.pushToTree(tree, 'Constant', this.parseConstant(l))
+                this.pushToTree(tree, 'Number', this.parseConstant(l))
             }
 
             else if(this.isString(l) && !this.inArray(variables, l)) {

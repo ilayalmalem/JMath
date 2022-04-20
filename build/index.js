@@ -7,5 +7,5 @@ const JMathEqParser_1 = __importDefault(require("./classes/JMathEqParser"));
 const JMathFunctions_1 = __importDefault(require("./classes/JMathFunctions"));
 const funcs = new JMathFunctions_1.default();
 const parser = new JMathEqParser_1.default();
-// console.log(parser.parse('ln(2.718)'))
-let values = funcs.getValues('x^2', [0, 10]);
+let values = funcs.getValues('e / (πx)', [0, 10]);
+console.log(values);

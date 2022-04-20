@@ -4,6 +4,5 @@ import JMathFunctions from "./classes/JMathFunctions"
 
 const funcs = new JMathFunctions()
 const parser = new JMathEqParser()
-
-// console.log(parser.parse('ln(2.718)'))
-let values = funcs.getValues('x^2', [0, 10])
+let values = funcs.getValues('e / (πx)', [0, 10])
+console.log(values);
