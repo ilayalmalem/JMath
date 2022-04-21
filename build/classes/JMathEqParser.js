@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// Ivory engine
 class JMathEqParser {
     isNumber(n) {
         return !isNaN(n);
@@ -93,9 +94,19 @@ class JMathEqParser {
             }
             // Stack checks 
             if (stack) {
-                if (stack == 'ln') {
-                    this.pushToTree(tree, 'NaturalLog', '');
-                    stack = '';
+                switch (stack) {
+                    case 'ln':
+                        this.pushToTree(tree, 'Function', 'NaturalLog');
+                        stack = '';
+                        break;
+                    case 'sqrt':
+                        this.pushToTree(tree, 'Function', 'SquareRoot');
+                        stack = '';
+                        break;
+                    case 'sin':
+                        this.pushToTree(tree, 'Function', 'Sine');
+                        stack = '';
+                        break;
                 }
             }
         }
@@ -153,7 +164,12 @@ class JMathEqParser {
                 case 'BlockEnd':
                     equation += ')';
                     break;
-                case 'NaturalLog':
+                case 'Function':
+                    const translations = {
+                        'NaturalLog': Math.log,
+                        'SquareRoot': Math.sqrt,
+                        'Sine': Math.sin
+                    };
                     let eq = '';
                     let skips = -1;
                     for (let i = index; i <= tree.length; i++) {
@@ -163,15 +179,16 @@ class JMathEqParser {
                             break;
                         }
                         else {
-                            eq += element === null || element === void 0 ? void 0 : element.content;
+                            if (element.type != 'Function') {
+                                eq += element === null || element === void 0 ? void 0 : element.content;
+                            }
                             skips++;
                         }
                     }
-                    console.log(index);
                     index = index + skips;
-                    let logInside = this.evalTree(this.parse(eq), { x: (varValues.x || 0) });
-                    let logValue = Math.log(eval(logInside));
-                    equation += (this.evalTree([{ type: 'Number', content: logValue }], { x: varValues[branch.content] }));
+                    let functionInside = this.evalTree(this.parse(eq), { x: (varValues.x || 0) });
+                    let functionValue = translations[branch.content](eval(functionInside));
+                    equation += (this.evalTree([{ type: 'Number', content: functionValue }], { x: varValues[branch.content] }));
                     break;
                 default:
                     break;

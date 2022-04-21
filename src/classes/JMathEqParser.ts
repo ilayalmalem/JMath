@@ -1,5 +1,7 @@
 import { Branch } from "../types/Branch"
 
+// Ivory engine
+
 export default class JMathEqParser {
     public isNumber(n: any) {
         return !isNaN(n)
@@ -108,9 +110,19 @@ export default class JMathEqParser {
 
             // Stack checks 
             if(stack) {
-                if(stack == 'ln') {
-                    this.pushToTree(tree, 'NaturalLog', '')
-                    stack = ''
+                switch(stack) {
+                    case 'ln':
+                        this.pushToTree(tree, 'Function', 'NaturalLog')
+                        stack = ''
+                        break;
+                    case 'sqrt':
+                        this.pushToTree(tree, 'Function', 'SquareRoot')
+                        stack = ''
+                        break;
+                    case 'sin':
+                        this.pushToTree(tree, 'Function', 'Sine')
+                        stack = ''
+                        break;
                 }
             }
         }
@@ -176,7 +188,13 @@ export default class JMathEqParser {
                     equation += ')'
                     break
                 
-                case 'NaturalLog':
+                case 'Function':
+                    const translations = {
+                        'NaturalLog': Math.log,
+                        'SquareRoot': Math.sqrt,
+                        'Sine': Math.sin
+                    }
+                    
                     let eq = ''
                     let skips = -1
 
@@ -186,18 +204,19 @@ export default class JMathEqParser {
                             skips++
                             break
                         } else {
-                            eq += element?.content
+                            if(element.type != 'Function') {
+                                eq += element?.content
+                            }
                             skips++
                         }
                     }
                     
-                    console.log(index);
                     index = index + skips
                     
-                    let logInside = this.evalTree(this.parse(eq), {x: (varValues.x || 0)})   
-                    let logValue = Math.log(eval(logInside))
-
-                    equation += (this.evalTree([{type: 'Number', content: logValue}], {x: varValues[branch.content as keyof typeof varValues]}))
+                    let functionInside = this.evalTree(this.parse(eq), {x: (varValues.x || 0)})   
+                    let functionValue = translations[branch.content as keyof typeof translations](eval(functionInside))
+                    
+                    equation += (this.evalTree([{type: 'Number', content: functionValue}], {x: varValues[branch.content as keyof typeof varValues]}))
                     break
                 default:
                     break;
