@@ -46,17 +46,20 @@ You can also get the slope of a function by calling slope(), and passing two poi
 * Extracted functionality to JMathHelpers
 * Started performance measuring
 
-
+#### v1.1.1@alpha
+* Added Nova@1.0(preview) support for constants
 
 
 ### JMath@next
 #### Patch - v1.1.1
 * Adding more constants
 * Add helpers for the Point type
-* Reduce functionValues 1000000 time to 10s
 
 #### Minor - v1.2.0
 * Complete deprecation of Ivory, and the release of the Nova@2.0 engine, a recursive, more intelligent and capable parsing engine
+* Plot function
+* Matrix Parsing engine and Helpers
+* Function parameters
 
 #### Major - v2.0.0
 * Releasing Nove@2.0 
@@ -65,6 +68,7 @@ You can also get the slope of a function by calling slope(), and passing two poi
 * Adding atleast 60 constants from math, physics and chemistry
 * Adding the option to add more than one variable to a function
 * Reduce functionValues 1000000 time to 5s
+* Complex numbers
 
 ### Performance
 
