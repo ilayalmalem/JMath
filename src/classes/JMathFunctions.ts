@@ -6,16 +6,13 @@ import JMathEqParser from "./JMathEqParser"
 export default class JMathFunctions {
     private jmb: JMathBasic
     private jmp: JMathEqParser
-    // private angleMode: AngleMode
+    private angleMode: AngleMode
     constructor() {
         this.jmb = new JMathBasic(0)
         this.jmp = new JMathEqParser()
-        // this.angleMode = 'rad'
+        this.angleMode = 'rad'
     }
-    
-    // public setAngleMode(mode: AngleMode) {
-    //     this.angleMode = mode
-    // }
+
 
     public slope(point1: Point, point2: Point) {
         return (point2.y - point1.y) / (point2.x - point1.x)
@@ -27,7 +24,7 @@ export default class JMathFunctions {
 
         for (let i = start; i < end; i++) {
             const parsed = this.jmp.parse(func)
-            const evaled = this.jmp.evalTree(parsed, {x: i}, this.angleMode)
+            const evaled = this.jmp.evalTree(parsed, {x: i})
             points.push({x: i, y: evaled})
         }
 

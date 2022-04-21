@@ -6,15 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const JMathBasic_1 = __importDefault(require("./JMathBasic"));
 const JMathEqParser_1 = __importDefault(require("./JMathEqParser"));
 class JMathFunctions {
-    // private angleMode: AngleMode
     constructor() {
         this.jmb = new JMathBasic_1.default(0);
         this.jmp = new JMathEqParser_1.default();
-        // this.angleMode = 'rad'
+        this.angleMode = 'rad';
     }
-    // public setAngleMode(mode: AngleMode) {
-    //     this.angleMode = mode
-    // }
     slope(point1, point2) {
         return (point2.y - point1.y) / (point2.x - point1.x);
     }
@@ -23,7 +19,7 @@ class JMathFunctions {
         const points = [];
         for (let i = start; i < end; i++) {
             const parsed = this.jmp.parse(func);
-            const evaled = this.jmp.evalTree(parsed, { x: i }, this.angleMode);
+            const evaled = this.jmp.evalTree(parsed, { x: i });
             points.push({ x: i, y: evaled });
         }
         return points;

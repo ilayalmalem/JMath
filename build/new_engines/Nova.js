@@ -42,6 +42,14 @@ class NovaParser {
                             content: currentLetter
                         });
                     }
+                    else {
+                        if (this.helpers.isConstant(currentLetter)) {
+                            tree.push({
+                                type: 'Constant',
+                                content: currentLetter
+                            });
+                        }
+                    }
                 }
                 if (['+', '-', '/', '^', '*'].includes(currentLetter)) {
                     tree.push({
@@ -84,7 +92,7 @@ class NovaParser {
         }
     }
     readTree(tree, varValues) {
-        var _a;
+        var _a, _b, _c, _d, _e;
         let eq = '';
         for (let index = 0; index <= tree.length; index++) {
             let current = tree[index];
@@ -121,6 +129,17 @@ class NovaParser {
                     break;
                 case 'Number':
                     eq += current.content;
+                    break;
+                case 'Constant':
+                    let val = this.helpers.parseConstant(current.content);
+                    if (['Number', 'Variable', 'Constant'].includes((_b = tree[index - 1]) === null || _b === void 0 ? void 0 : _b.type))
+                        eq += `*${val}`;
+                    else if (['Number', 'Variable', 'Constant'].includes((_c = tree[index + 1]) === null || _c === void 0 ? void 0 : _c.type))
+                        eq += `${val}*`;
+                    else if (['Number', 'Variable', 'Constant'].includes((_d = tree[index - 1]) === null || _d === void 0 ? void 0 : _d.type) && ['Number', 'Variable', 'Constant'].includes((_e = tree[index + 1]) === null || _e === void 0 ? void 0 : _e.type))
+                        eq += `${val}*`;
+                    else
+                        eq += `${val}`;
                     break;
             }
         }

@@ -45,6 +45,13 @@ export default class NovaParser {
                             type: 'Variable',
                             content: currentLetter
                         })
+                    } else {
+                        if(this.helpers.isConstant(currentLetter)) {
+                            tree.push({
+                                type: 'Constant',
+                                content: currentLetter
+                            })
+                        }
                     }
                 }
 
@@ -131,6 +138,15 @@ export default class NovaParser {
                 case 'Number': 
                     eq += current.content
                     break
+
+                case 'Constant':
+                    let val = this.helpers.parseConstant(current.content)
+                    if(['Number', 'Variable', 'Constant'].includes(tree[index - 1]?.type)) eq += `*${val}`
+                    else if(['Number', 'Variable', 'Constant'].includes(tree[index + 1]?.type)) eq += `${val}*`
+                    else if(['Number', 'Variable', 'Constant'].includes(tree[index - 1]?.type) && ['Number', 'Variable', 'Constant'].includes(tree[index + 1]?.type)) eq += `${val}*`
+                    else eq += `${val}`
+                    break
+
             }
         }
 
